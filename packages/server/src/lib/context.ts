@@ -1,12 +1,16 @@
-export async function createContext() {
-  // const session = await auth.api.getSession({
-  //   headers: hono.req.raw.headers,
-  // });
-  // return {
-  //   session,
-  // };
+import { supabase } from "../supabase";
+
+export async function createContext({ req }: { req: Request }) {
+  const bearerToken = req.headers.get("authorization")?.split("Bearer ").pop();
+  if (!bearerToken) {
+    return {
+      session: null,
+    };
+  }
+
+  const user = await supabase.auth.getUser(bearerToken);
   return {
-    session: null,
+    session: user.data.user,
   };
 }
 
