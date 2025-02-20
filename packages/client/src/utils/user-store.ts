@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { queryClient } from "./trpc";
 
 type User = {
   id: string;
@@ -17,6 +18,12 @@ type Actions = {
 
 export const userStore = create<State & Actions>((set) => ({
   user: null,
-  setUser: (user) => set({ user }),
-  logout: () => set({ user: null }),
+  setUser: (user) => {
+    set({ user });
+    queryClient.invalidateQueries();
+  },
+  logout: () => {
+    set({ user: null });
+    queryClient.clear();
+  },
 }));
