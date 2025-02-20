@@ -3,18 +3,17 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "db:local": "turso dev --db-file local.db",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server"
   },
   "dependencies": {
     "@hono/trpc-server": "^0.3.4",
-    "@libsql/client": "^0.14.0",
     "@supabase/supabase-js": "^2.48.1",
     "@trpc/server": "^11.0.0-rc.795",
     "drizzle-orm": "^0.39.3",
     "hono": "^4.7.2",
+    "postgres": "^3.4.5",
     "zod": "^3.24.2"
   },
   "devDependencies": {
