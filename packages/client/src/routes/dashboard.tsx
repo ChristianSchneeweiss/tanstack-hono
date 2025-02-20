@@ -1,22 +1,23 @@
+import { queryClient, trpc } from "@/utils/trpc";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
 
 export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
-  loader: async ({ context: { trpcQueryUtils } }) => {
-    await trpcQueryUtils.healthCheck.ensureData();
-    await trpcQueryUtils.privateData.ensureData();
-    return;
+  loader: async () => {
+    await queryClient.prefetchQuery(trpc.protected.queryOptions());
+    console.log("prefetched");
   },
 });
 
 function RouteComponent() {
-  const navigate = Route.useNavigate();
+  const { data } = useQuery(trpc.protected.queryOptions());
 
   return (
     <div>
       <h1>Dashboard</h1>
       <p>Welcome hello</p>
+      <p>{data?.email}</p>
     </div>
   );
 }
