@@ -23,7 +23,7 @@ export const queryClient = new QueryClient({
 export const trpcClient = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
-      url: "http://localhost:3000/trpc",
+      url: import.meta.env.VITE_API_URL,
       fetch: async (url, options) => {
         const user = userStore.getState().user;
         if (user && options) {

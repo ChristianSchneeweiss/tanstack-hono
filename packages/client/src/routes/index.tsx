@@ -12,7 +12,11 @@ export const Route = createFileRoute("/")({
 function HomeComponent() {
   const healthCheck = useQuery(trpc.healthCheck.queryOptions());
   const { user } = userStore();
-  const { data } = useQuery(trpc.protected.queryOptions());
+  const { data } = useQuery(
+    trpc.protected.queryOptions(undefined, {
+      enabled: !!user,
+    }),
+  );
 
   return (
     <div className="flex w-[600px] flex-col items-center justify-center p-2 text-white">
