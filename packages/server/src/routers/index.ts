@@ -1,5 +1,6 @@
-import { router, publicProcedure, protectedProcedure } from "../lib/trpc";
-import { z } from "zod";
+import { db } from "../db";
+import { TB_user } from "../db/schema";
+import { protectedProcedure, publicProcedure, router } from "../lib/trpc";
 
 export const appRouter = router({
   healthCheck: publicProcedure.query(() => {
@@ -7,6 +8,19 @@ export const appRouter = router({
   }),
   protected: protectedProcedure.query(({ ctx }) => {
     return ctx.session;
+  }),
+  createUser: protectedProcedure.mutation(async ({ ctx }) => {
+    const { session } = ctx;
+    if (!session) {
+      throw new Error("No session found");
+    }
+    await db
+      .insert(TB_user)
+      .values({
+        id: session.id,
+        email: session.email,
+      })
+      .onConflictDoNothing();
   }),
 });
 

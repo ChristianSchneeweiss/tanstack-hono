@@ -1,9 +1,8 @@
+import { AuthForm } from "@/components/auth-form";
 import { trpc } from "@/utils/trpc";
-import { Auth } from "@supabase/auth-ui-react";
+import { userStore } from "@/utils/user-store";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { supabase } from "@/utils/supabase";
-import { userStore } from "@/utils/user-store";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -24,11 +23,7 @@ function HomeComponent() {
       <Link to="/dashboard">Go to Dashboard</Link>
       <p>healthCheck: {healthCheck.data}</p>
       <p>protected: {data?.email}</p>
-      {user ? (
-        <p>User is logged in</p>
-      ) : (
-        <Auth supabaseClient={supabase} providers={[]} />
-      )}
+      {user ? <p>User is logged in</p> : <AuthForm />}
     </div>
   );
 }
