@@ -1,10 +1,9 @@
-import * as trpcExpress from "@trpc/server/adapters/express";
+import { trpcServer } from "@hono/trpc-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { createContext } from "./lib/context";
 import { appRouter } from "./routers/index";
-import { trpcServer } from "@hono/trpc-server";
 
 type Bindings = {
   FOO: string;
@@ -22,7 +21,9 @@ app.use(
   "/trpc/*",
   trpcServer({
     router: appRouter,
-    createContext,
+    createContext: ({ req }, c) => {
+      return createContext({ req, env: c.env });
+    },
   })
 );
 

@@ -3,15 +3,14 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio",
-    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server"
+    "dev": "bunx wrangler dev --port 3000",
+    "start": "bun run src/index.ts",
+    "deploy": "bunx wrangler deploy --minify"
   },
   "dependencies": {
     "@hono/trpc-server": "^0.3.4",
     "@supabase/supabase-js": "^2.48.1",
-    "@trpc/server": "^11.0.0-rc.795",
+    "@trpc/server": "^11.0.0-rc.817",
     "drizzle-orm": "^0.39.3",
     "hono": "^4.7.2",
     "postgres": "^3.4.5",

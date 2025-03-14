@@ -1,4 +1,3 @@
-import { db } from "../db";
 import { TB_user } from "../db/schema";
 import { protectedProcedure, publicProcedure, router } from "../lib/trpc";
 
@@ -10,7 +9,7 @@ export const appRouter = router({
     return ctx.session;
   }),
   createUser: protectedProcedure.mutation(async ({ ctx }) => {
-    const { session } = ctx;
+    const { session, db } = ctx;
     if (!session) {
       throw new Error("No session found");
     }
