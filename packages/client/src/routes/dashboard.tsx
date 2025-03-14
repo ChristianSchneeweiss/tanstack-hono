@@ -11,7 +11,9 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function RouteComponent() {
-  const { data } = useQuery(trpc.protected.queryOptions());
+  const { data } = useQuery(
+    trpc.protected.queryOptions(undefined, { enabled: false }),
+  );
 
   return (
     <div>

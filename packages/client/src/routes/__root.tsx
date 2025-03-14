@@ -1,3 +1,4 @@
+import Header from "@/components/header";
 import Loader from "@/components/loader";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -13,7 +14,6 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useEffect } from "react";
 import "../index.css";
-import Header from "@/components/header";
 
 export interface RouterAppContext {}
 
@@ -22,6 +22,10 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   beforeLoad: async () => {
     const setUser = userStore.getState().setUser;
     const logout = userStore.getState().logout;
+    const user = userStore.getState().user;
+    if (user) {
+      return;
+    }
     const session = await supabase.auth.getSession();
     if (session.data.session?.user) {
       const user = session.data.session.user;
@@ -39,26 +43,24 @@ function RootComponent() {
   const isFetching = useRouterState({
     select: (s) => s.isLoading,
   });
-  const { setUser, logout } = userStore();
+  const { setUser, user } = userStore();
 
   useEffect(() => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
+      if (session?.user && !user) {
         const user = session.user;
         setUser({
           id: user.id,
           email: user.email,
           access_token: session.access_token,
         });
-      } else {
-        logout();
       }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [user]);
 
   return (
     <TRPCProvider>
